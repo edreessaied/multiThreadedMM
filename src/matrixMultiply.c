@@ -31,9 +31,6 @@ int runMultiThreadMatMul(Matrix* matrixAInfo, Matrix* matrixBInfo, Matrix* matri
         pthread_create(&threads[i], NULL, assignRow, (void*)threadJobInfo);
     }
 
-
-
-
     for (int i = 0; i < threadCount; i++) {
         pthread_join(threads[i], NULL);
     }
