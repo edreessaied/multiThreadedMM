@@ -10,16 +10,14 @@
 #define THREADMAX 500
 
 typedef struct threadJob {
-    Matrix* matrixAInfo;
-    Matrix* matrixBInfo;
-    Matrix* matrixCInfo;
-    int assignedRow;
-    pthread_t tid;
-    int jobCnt;
+    int currentAssignedRow;
 } threadJob;
 
 pthread_mutex_t cRowNumberLock;
 int unassignedRowsC;
+Matrix* matrixAInfo;
+Matrix* matrixBInfo;
+Matrix* matrixCInfo;
 
 void fillInAssignedCRow(threadJob* threadJobInfo);
 void* assignRow(void* arg);

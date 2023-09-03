@@ -7,41 +7,46 @@
 
 void fillInAssignedCRow(threadJob* threadJobInfo) {
     /* Perform matrix math and fill in C row */
-    int assignedRow = threadJobInfo->assignedRow;
+    int assignedRow = threadJobInfo->currentAssignedRow;
 
-    for (int i = 0; i < threadJobInfo->matrixBInfo->cols; i++) {
-        for (int j = 0; j < threadJobInfo->matrixAInfo->cols; j++) {
-            threadJobInfo->matrixCInfo->matrix[assignedRow][i] += 
-                threadJobInfo->matrixAInfo->matrix[assignedRow][j] *
-                threadJobInfo->matrixBInfo->matrix[j][i];
+    for (int i = 0; i < matrixBInfo->cols; i++) {
+        for (int j = 0; j < matrixAInfo->cols; j++) {
+            matrixCInfo->matrix[assignedRow][i] += 
+                matrixAInfo->matrix[assignedRow][j] *
+                matrixBInfo->matrix[j][i];
         }
     }
 }
 
 void* assignRow(void* arg) {
-    threadJob* threadJobInfo = (threadJob*) arg;
     int errorCheck = 0;
+    int currentAssignedRow = 0;
+    threadJob* threadJobInfo = (threadJob*) arg;
 
     while (1) {
         errorCheck = pthread_mutex_lock(&cRowNumberLock);
         if (errorCheck) {
-            /* Error check lock acquire */
+            printf("\n Error while acquiring mutex lock! "
+                            "\n Terminating program! \n");
+            exit(-1);
         }
 
         if (unassignedRowsC) {
             unassignedRowsC -= 1;
-            threadJobInfo->assignedRow = unassignedRowsC;
+            threadJobInfo->currentAssignedRow = unassignedRowsC;
             errorCheck = pthread_mutex_unlock(&cRowNumberLock);
             if (errorCheck) {
-                /* Error Check lock release */
+                printf("\n Error while releasing mutex lock!"
+                       "\n Terminating program! \n");
+                exit(-1);
             }
-            threadJobInfo->jobCnt += 1;
-            printf("\n Thread %d working %d jobs \n", threadJobInfo->tid, threadJobInfo->jobCnt);
             fillInAssignedCRow(threadJobInfo);
         } else {
             errorCheck = pthread_mutex_unlock(&cRowNumberLock);
             if (errorCheck) {
-                /* Error Check */
+                printf("\n Error while releasing mutex lock!"
+                       "\n Terminating program! \n");
+                exit(-1);
             }
             break;
         }

@@ -7,7 +7,7 @@
 #include "matrixMultiply.h"
 #include <time.h>
 
-int runMultiThreadMatMul(Matrix* matrixAInfo, Matrix* matrixBInfo, Matrix* matrixCInfo) {
+int runMultiThreadMatMul() {
     if (!matrixAInfo || !matrixBInfo || !matrixCInfo) {
         printf("\n I've detected a NULL matrix! \n");
         return 1;
@@ -21,14 +21,8 @@ int runMultiThreadMatMul(Matrix* matrixAInfo, Matrix* matrixBInfo, Matrix* matri
 
     start = clock();
     for (int i = 0; i < threadCount; i++) {
-        threadJobInfo = (threadJob*) calloc(1, sizeof(threadJob));
-        threadJobInfo->matrixAInfo = matrixAInfo;
-        threadJobInfo->matrixBInfo = matrixBInfo;
-        threadJobInfo->matrixCInfo = matrixCInfo;
-        threadJobInfo->tid = (pthread_t) i;
-        threadJobInfo->jobCnt = 0;
-
-        pthread_create(&threads[i], NULL, assignRow, (void*)threadJobInfo);
+        threadJobInfo = (threadJob*) calloc(1, sizeof(threadJobInfo));
+        pthread_create(&threads[i], NULL, assignRow, (void*) threadJobInfo);
     }
 
     for (int i = 0; i < threadCount; i++) {

@@ -22,9 +22,9 @@ void runMatrixMultiplyMenu() {
     int** matrixA = NULL;
     int** matrixB = NULL;
     int** matrixC = NULL;
-    Matrix* matrixAInfo = NULL;
-    Matrix* matrixBInfo = NULL;
-    Matrix* matrixCInfo = NULL;
+    matrixAInfo = NULL;
+    matrixBInfo = NULL;
+    matrixCInfo = NULL;
     
     errorCheck = extractMatrixDimensions(&rowsA, &colsA, &rowsB, &colsB);
     if (errorCheck) {
@@ -134,7 +134,7 @@ void runMatrixMultiplyMenu() {
     unassignedRowsC = matrixCInfo->rows;
 
     /* Run the matrix multiplication */
-    errorCheck = runMultiThreadMatMul(matrixAInfo, matrixBInfo, matrixCInfo);
+    errorCheck = runMultiThreadMatMul();
     if (errorCheck) {
         printf("\n* Ending program *\n");
         goto done;

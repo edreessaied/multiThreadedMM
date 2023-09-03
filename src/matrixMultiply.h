@@ -13,7 +13,7 @@ typedef struct Matrix {
     int cols;
 } Matrix;
 
-int runMultiThreadMatMul(Matrix* matrixA, Matrix* matrixB, Matrix* matrixC);
+int runMultiThreadMatMul();
 void freeMatrix(int** matrix, int rows);
 
 #endif

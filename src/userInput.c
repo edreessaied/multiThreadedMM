@@ -40,8 +40,9 @@ int extractMatrixDimensions(int* rowsA, int* colsA, int* rowsB, int* colsB) {
     }
 
     printf("\n Your left matrix will be of size: %d x %d"
-        "\n Your right matrix will be of size: %d x %d \n", 
-        *rowsA, *colsA, *rowsB, *colsB);
+        "\n Your right matrix will be of size: %d x %d"
+        "\n Your result matrix will be of size: %d x %d\n", 
+        *rowsA, *colsA, *rowsB, *colsB, *rowsA, *colsB);
 
     return 0;
 }
