@@ -9,5 +9,10 @@
 #include <string.h>
 #include <unistd.h> 
 
+#ifndef USERINPUT_H 
+#define THREADS_H
+
 int extractMatrixDimensions(int* rowsA, int* colsA, int* rowsB, int* colsB);
 int extractInputValue(void);
+
+#endif

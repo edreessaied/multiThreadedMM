@@ -3,7 +3,8 @@
     Description:    Header File For Matrix Multiplication
 */
 
-#include "userInput.h"
+#ifndef  MATRIXMULTIPLY_H 
+#define MATRIXMULTIPLY_H
 
 /* Struct definition for a matrix */
 typedef struct Matrix {
@@ -14,3 +15,5 @@ typedef struct Matrix {
 
 int runMultiThreadMatMul(Matrix* matrixA, Matrix* matrixB, Matrix* matrixC);
 void freeMatrix(int** matrix, int rows);
+
+#endif

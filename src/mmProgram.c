@@ -5,10 +5,9 @@
                     matrix multilpication
 */
 
-#include "mmProgram.h"
-#include "userInput.h"
 #include "readWriteMatrices.h"
-#include "matrixMultiply.h"
+
+void runMatrixMultiplyMenu(void);
 
 int main() {
     runMatrixMultiplyMenu();
@@ -42,7 +41,6 @@ void runMatrixMultiplyMenu() {
     }
     
     strncat(path, "/../matrices/matrixA.txt", 30);
-    printf("\n Current Path: %s\n", path);
     errorCheck = writeMatrixToFile(path, rowsA, colsA);   
     if (errorCheck) {
         printf("\n* Ending program *\n");
@@ -66,7 +64,6 @@ void runMatrixMultiplyMenu() {
     }
     
     strncat(path, "/../matrices/matrixB.txt", 30);
-    printf("\n Current Path: %s\n", path);
     errorCheck = writeMatrixToFile(path, rowsB, colsB);   
     if (errorCheck) {
         printf("\n* Ending program *\n");
@@ -86,6 +83,13 @@ void runMatrixMultiplyMenu() {
         printf("\n Could not allocate matrix C!"
                 "\n* Ending program *\n");
         goto done;
+    }
+    for (int i = 0; i < rowsA; i++) {
+        matrixC[i] = (int*) calloc(colsB, sizeof(int));
+        if (!matrixC[i]) {
+            printf("\n Could not allocate row %d for matrix C! \n", i);
+            goto done;
+        }
     }
 
     /* Dynammically allocate the structures for each matrix */
@@ -119,6 +123,15 @@ void runMatrixMultiplyMenu() {
     matrixCInfo->rows = rowsA;
     matrixCInfo->cols = colsB;
 
+    /* Initialize the mutex lock */
+    errorCheck = pthread_mutex_init(&cRowNumberLock, NULL);
+    if (errorCheck) {
+        printf("\n I couldn't initialize the cRowNumberLock! \n");
+        goto done;
+    }
+
+    /* Initialize the number of unassigned rows to fill in */
+    unassignedRowsC = matrixCInfo->rows;
 
     /* Run the matrix multiplication */
     errorCheck = runMultiThreadMatMul(matrixAInfo, matrixBInfo, matrixCInfo);
@@ -127,20 +140,28 @@ void runMatrixMultiplyMenu() {
         goto done;
     }
 
-    /* Write matrix C to a file ... */
-
+    /* Wrote product matrix to matrixC.txt */
+    path[0] = '\0';
+    pathErrorCheck = (char*) getcwd(path, 250);
+    if (!pathErrorCheck) {
+        printf("\n Could not extract your current working directory! \n"
+               "\n* Ending program *\n");
+        goto done;
+    }
+    
+    strncat(path, "/../matrices/matrixC.txt", 30);
+    errorCheck = writeProductMatrixToFile(path, matrixCInfo);   
+    if (errorCheck) {
+        printf("\n* Ending program *\n");
+        goto done;
+    } 
 
     done:
         freeMatrix(matrixA, rowsA);
         freeMatrix(matrixB, rowsB);
         freeMatrix(matrixC, rowsA);
-        if (matrixAInfo) {
-            free(matrixAInfo);
-        }
-        if (matrixBInfo) {
-            free(matrixBInfo);
-        }
-        if (matrixCInfo) {
-            free(matrixCInfo);
-        }
+        
+        free(matrixAInfo);
+        free(matrixBInfo);
+        free(matrixCInfo);
 }
