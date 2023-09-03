@@ -20,8 +20,6 @@ int runMultiThreadMatMul(Matrix* matrixAInfo, Matrix* matrixBInfo, Matrix* matri
     clock_t start, end;
 
     start = clock();
-
-    
     for (int i = 0; i < threadCount; i++) {
         threadJobInfo = (threadJob*) calloc(1, sizeof(threadJob));
         threadJobInfo->matrixAInfo = matrixAInfo;
@@ -32,6 +30,8 @@ int runMultiThreadMatMul(Matrix* matrixAInfo, Matrix* matrixBInfo, Matrix* matri
 
         pthread_create(&threads[i], NULL, assignRow, (void*)threadJobInfo);
     }
+
+
 
 
     for (int i = 0; i < threadCount; i++) {
