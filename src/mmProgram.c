@@ -1,19 +1,21 @@
 /*
     File Name:      mmProgram.c
-    Description:    Source of Program Activation
-                    Generates matrices and initiaties 
-                    matrix multilpication
+    Description:    Program Driver | Generates Matrices and Initiaties Matrix Multilpication
+    Written By:     Edrees Saied
 */
 
 #include "readWriteMatrices.h"
 
+/* Function that runs menu in program driver */
 void runMatrixMultiplyMenu(void);
 
+/* Program Driver */
 int main() {
     runMatrixMultiplyMenu();
     return 0;
 }
 
+/* Runs Program Menu */
 void runMatrixMultiplyMenu() {
     int rowsA, colsA, rowsB, colsB = 0;
     int errorCheck = 0;
@@ -26,26 +28,27 @@ void runMatrixMultiplyMenu() {
     matrixBInfo = NULL;
     matrixCInfo = NULL;
     
+    /* Extract the requested matrix dimensions from the user */
     errorCheck = extractMatrixDimensions(&rowsA, &colsA, &rowsB, &colsB);
     if (errorCheck) {
         printf("\n* Ending program *\n");
         return;
     }
 
-    /* Store sample matrix into matrixA.txt */
+    /* Write sample matrix to matrixA.txt */
     pathErrorCheck = (char*) getcwd(path, 250);
     if (!pathErrorCheck) {
         printf("\n Could not extract your current working directory! \n"
                "\n* Ending program *\n");
         return;
     }
-    
     strncat(path, "/../matrices/matrixA.txt", 30);
     errorCheck = writeMatrixToFile(path, rowsA, colsA);   
     if (errorCheck) {
         printf("\n* Ending program *\n");
         return;
     }  
+    printf("\n Matrix A has been written to %s! \n", path);
 
     /* Read matrix A into memory */
     matrixA = readMatrixFromFile(path, rowsA, colsA);
@@ -54,7 +57,7 @@ void runMatrixMultiplyMenu() {
         return;
     }
 
-    /* Store sample matrix into matrixB.txt */
+    /* Write sample matrix to matrixB.txt */
     path[0] = '\0';
     pathErrorCheck = (char*) getcwd(path, 250);
     if (!pathErrorCheck) {
@@ -62,13 +65,13 @@ void runMatrixMultiplyMenu() {
                "\n* Ending program *\n");
         goto done;
     }
-    
     strncat(path, "/../matrices/matrixB.txt", 30);
     errorCheck = writeMatrixToFile(path, rowsB, colsB);   
     if (errorCheck) {
         printf("\n* Ending program *\n");
         goto done;
     }  
+    printf("\n Matrix B has been written to %s! \n", path);
 
     /* Read matrix B into memory */
     matrixB = readMatrixFromFile(path, rowsB, colsB);
@@ -77,7 +80,7 @@ void runMatrixMultiplyMenu() {
         goto done;
     }
 
-    /* Create matrixC */
+    /* Allocate matrixC */
     matrixC = (int**) calloc(rowsA, sizeof(int*));
     if (!matrixC) {
         printf("\n Could not allocate matrix C!"
@@ -140,7 +143,7 @@ void runMatrixMultiplyMenu() {
         goto done;
     }
 
-    /* Wrote product matrix to matrixC.txt */
+    /* Write product matrix to matrixC.txt */
     path[0] = '\0';
     pathErrorCheck = (char*) getcwd(path, 250);
     if (!pathErrorCheck) {
@@ -148,14 +151,15 @@ void runMatrixMultiplyMenu() {
                "\n* Ending program *\n");
         goto done;
     }
-    
     strncat(path, "/../matrices/matrixC.txt", 30);
     errorCheck = writeProductMatrixToFile(path, matrixCInfo);   
     if (errorCheck) {
         printf("\n* Ending program *\n");
         goto done;
     } 
+    printf("\n Matrix C has been written to %s! \n", path);
 
+    /* Free all allocations */
     done:
         freeMatrix(matrixA, rowsA);
         freeMatrix(matrixB, rowsB);
