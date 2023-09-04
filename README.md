@@ -10,7 +10,9 @@ on your machine (clang, gcc, etc.). For context, I've
 compiled the code using clang on VSCode. 
 
 The project contains two directories:
+
 `/MultiThreadMM/matrices/`
+
 `/MultiThreadMM/src/`
 
 The `/MultiThreadMM/matrices/` directory contains the text files
@@ -18,13 +20,16 @@ where the left, right, and product matrices will be read from and
 written to.
 
 The `/MultiThreadMM/src/` directory is where all the code lives.
-Once you downloaded and moved the project into a 
+Once you've downloaded and moved the project into a 
 comfortable environment of your choosing, you can 
 open a terminal and `cd` into this directory. In this directory, 
 I've also written a `Makefile`. In order to compile and run the program, 
 run these commands in the terminal in the current directory:
+
 `make`
+
 `./mmProgram`
+
 The first command will generate an executable file
 titled `mmProgram`. `./mmProgram` will then run this
 executable. If you receive an issue when running `make` that
