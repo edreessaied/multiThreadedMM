@@ -1,7 +1,7 @@
 # Welcome to My MultiThreaded Matrix Multiplication Program!
 This program uses a multi-threaded algorithm to execute
-matrix multiplication even of potentially large matrices 
-(~ 1000 x 1000) in a matter of seconds.
+matrix multiplication of potentially large matrices 
+(~ 1000 x 1000) in just a matter of seconds!
 
 ## How To Build and Run The Program
 Download the `MultiThreadMM` project onto your machine. Move 
